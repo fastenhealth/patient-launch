@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import SyntaxHighlighter from "react-syntax-highlighter";
+// import SyntaxHighlighter from "react-syntax-highlighter";
 
 interface JsonViewerProps {
   jsonString: string;
@@ -25,14 +25,17 @@ function JsonViewer(props: JsonViewerProps) {
   const { jsonString } = props;
 
   return (
-    <SyntaxHighlighter
-      language="json"
-      customStyle={{
-        backgroundColor: "var(--background-muted)",
-      }}
-    >
-      {jsonString}
-    </SyntaxHighlighter>
+      <pre
+          style={{
+              backgroundColor: "var(--background-muted)",
+              padding: "1em",
+              borderRadius: "4px",
+              overflowX: "auto",
+              fontFamily: "monospace",
+          }}
+      >
+      <code>{jsonString}</code>
+    </pre>
   );
 }
 

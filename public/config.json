@@ -1,7 +1,11 @@
 {
-  "fhirServerUrl": "https://proxy.smartforms.io/v/r4/fhir",
-  "authRequired": false,
-  "launchParamConfigType": "proxy",
+  "fhirServerUrl": "https://api.medplum.com/fhir/R4",
+  "authRequired": true,
+  "launchParamConfigType": "default",
+  "oAuthGrantType": "authorization_code",
+  "oAuthScope": "fhirUser offline_access openid profile launch/practitioner user/*.rs",
+  "oAuthClientId": "5f318fe2-34cc-4bd2-8949-6e6e1918ab4d",
+
   "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
   "appList": [
     {
