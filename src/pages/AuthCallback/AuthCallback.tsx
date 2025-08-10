@@ -24,7 +24,7 @@ import useConfig from "@/hooks/useConfig.ts";
 function AuthCallback() {
   const { protocol, host } = window.location;
 
-  const REDIRECT_URI = `${protocol}//${host}/patient-auth/authcallback`;
+  const REDIRECT_URI = `${protocol}//${host}/patient-launch/authcallback`;
 
   // Check if code and state are present/valid
   const { code, stateIsValid } = useValidateCodeAndState();
@@ -70,7 +70,7 @@ function AuthCallback() {
               className="text-white bg-blue-500 hover:bg-blue-600"
               size="sm"
               onClick={() => {
-                window.location.href = `${protocol}//${host}/patient-auth`;
+                window.location.href = `${protocol}//${host}/patient-launch`;
               }}
             >
               Retry authorisation
@@ -101,7 +101,7 @@ function AuthCallback() {
               className="text-white bg-blue-500 hover:bg-blue-600"
               size="sm"
               onClick={() => {
-                window.location.href = `${protocol}//${host}/patient-auth`;
+                window.location.href = `${protocol}//${host}/patient-launch`;
               }}
             >
               Retry authorisation

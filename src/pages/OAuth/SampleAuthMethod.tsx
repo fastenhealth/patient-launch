@@ -56,7 +56,7 @@ function SampleAuthMethod() {
               className="text-white bg-blue-500 hover:bg-blue-600"
               size="sm"
               onClick={() => {
-                window.location.href = `${protocol}//${host}/patient-auth`;
+                window.location.href = `${protocol}//${host}/patient-launch`;
               }}
             >
               Retry authorisation
