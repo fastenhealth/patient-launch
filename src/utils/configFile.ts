@@ -151,7 +151,7 @@ export function appConfigIsValid(app: any): app is AppConfig {
 }
 
 export async function loadConfigFle(): Promise<ConfigFile> {
-  const response = await fetch("/config.json");
+  const response = await fetch("/patient-launch/config.json");
 
   if (!response.ok) {
     throw new Error(
