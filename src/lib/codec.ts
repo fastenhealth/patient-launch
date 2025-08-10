@@ -154,7 +154,7 @@ export function decode(launch: string): LaunchParams {
   try {
     arr = JSON.parse(base64UrlDecode(launch));
   } catch (error) {
-    console.error(`Failed to decode launch parameters:`, error);
+    console.error(`Failed to decode launch parameters:`, launch, error);
     throw new Error(`Failed to decode launch parameters: ${error}`);
   }
 
