@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import type { LaunchParams } from "../lib/codec.ts";
 import { decode, encode } from "../lib/codec.ts";
+import useConfig from "@/hooks/useConfig.ts";
 
 interface LauncherState
   extends Omit<Partial<LauncherQuery>, "launch">,
@@ -37,6 +38,7 @@ export default function useLauncherQuery(
   initialState: Partial<LauncherQuery> = {}
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { authRequired } = useConfig();
 
   const query: LauncherQuery = {
     ...LauncherQueryDefaults,
@@ -47,8 +49,19 @@ export default function useLauncherQuery(
     query[key as keyof LauncherQuery] = value;
   });
 
-  const launch: LaunchParams = decode(query.launch);
 
+  if(authRequired){
+    // authentication is required, so there's no guarantee that the launch parameter is encoded as a JSON payload
+    // instead we need to exit early and redirect to the AuthCallback
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return { query, launch: {} as LaunchParams, setQuery: (props: Partial<LauncherState>) => {
+      console.warn("called setQuery when auth is required, doing nothing", props);
+      } };
+  }
+
+
+  const launch: LaunchParams = decode(query.launch) as LaunchParams;
   // Properties that belong to the launch parameters are encoded into a
   // `launch` parameter. Everything else is store as normal query parameter.
   // `undefined` can be used to remove launch or query parameters.
