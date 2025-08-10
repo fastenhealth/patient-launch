@@ -37,7 +37,9 @@ export function getLaunchParamsFromSearchParams(searchParams: URLSearchParams): 
     return launch ? (decode(launch) as LaunchParams) : {} as LaunchParams;
   } catch (error) {
     console.warn("Failed to decode launch parameters from search params", error);
-    return {} as LaunchParams;
+    return {
+      launch_type: "provider-ehr"
+    } as LaunchParams;
   }
 }
 
@@ -107,7 +109,9 @@ export default function useLauncherQuery(
     // authentication is required, so there's no guarantee that the launch parameter is encoded as a JSON payload
     // instead we need to exit early and redirect to the AuthCallback
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return { query, launch: {} as LaunchParams, setQuery: setQueryWrapped };
+    return { query, launch: {
+      launch_type: "provider-ehr"
+      } as LaunchParams, setQuery: setQueryWrapped };
   } else {
     const launch: LaunchParams = decode(query.launch) as LaunchParams;
     return { query, launch, setQuery: setQueryWrapped };
