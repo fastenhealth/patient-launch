@@ -8,7 +8,6 @@ export default defineConfig({
   base: "/patient-launch/",
   resolve: {
     alias: {
-      "@mui/material/utils": "@mui/material/utils",
       "@": path.resolve(__dirname, "./src"),
     },
   },

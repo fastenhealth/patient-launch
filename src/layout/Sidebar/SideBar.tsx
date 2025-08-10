@@ -16,7 +16,7 @@
  */
 
 import { AppWindow, Settings, User } from "lucide-react";
-import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
+// import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
 import SideBarItem from "@/layout/Sidebar/SideBarItem.tsx";
 import SideBarLogo from "@/layout/Sidebar/SideBarLogo.tsx";
 import useActivePage from "@/hooks/useActivePage.ts";
@@ -37,7 +37,7 @@ function SideBar() {
           sidebarItem={{
             title: "Smart EHR Launcher",
             path: "/",
-            Icon: <DataSaverOnIcon fontSize="large" />,
+            Icon: <div className="h-8 w-8 bg-gray-300 rounded-full" />,
           }}
           onSwitchActivePage={switchActivePage}
         />
