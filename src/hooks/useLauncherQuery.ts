@@ -49,7 +49,7 @@ function getLauncherStateFromSessionStorage<T extends Record<string, any>>(): T 
 
 //saveLauncherStateToSessionStorage
 function setQuery(props: Partial<LauncherState>) {
-  const launch = getLauncherStateFromSessionStorage();
+  const launch = getLauncherStateFromSessionStorage<LaunchParams>();
 
   for (const name in props) {
     const value = props[name as keyof LauncherState];
@@ -103,7 +103,7 @@ export default function useLauncherQuery(
     // authentication is required, so there's no guarantee that the launch parameter is encoded as a JSON payload
     // instead we need to exit early and redirect to the AuthCallback
 
-    const launch: LaunchParams = getLauncherStateFromSessionStorage()
+    const launch: LaunchParams = getLauncherStateFromSessionStorage<LaunchParams>()
 
     return { query, launch, setQuery};
   } else {
@@ -113,7 +113,7 @@ export default function useLauncherQuery(
     if(query.launch){
       setQuery(decode(query.launch));
     }
-    const launch: LaunchParams = getLauncherStateFromSessionStorage()
+    const launch: LaunchParams = getLauncherStateFromSessionStorage<LaunchParams>()
     return { query, launch, setQuery };
   }
 
