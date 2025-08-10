@@ -31,13 +31,60 @@ const LauncherQueryDefaults: LauncherQuery = {
   validation: "0",
 };
 
+const launcherSessionStoragePrefix = "launcher-state";
+
+
+// populate LaunchParams from sessionStorage.
+// It iterates through all keys in sessionStorage, filters those that match the launcherSessionStoragePrefix, and
+// reconstructs a LaunchParams object.
+function getLauncherStateFromSessionStorage(): LaunchParams {
+  return Object.keys(sessionStorage)
+      .filter((key) => key.startsWith(`${launcherSessionStoragePrefix}.`))
+      .reduce((acc, key) => {
+        const launchKey = key.replace(`${launcherSessionStoragePrefix}.`, "") as (keyof LaunchParams);
+        acc[launchKey] = JSON.parse(sessionStorage.getItem(key) || "null");
+        return acc;
+      }, {} as LaunchParams);
+}
+
+//saveLauncherStateToSessionStorage
+function setQuery(props: Partial<LauncherState>) {
+  const launch = getLauncherStateFromSessionStorage();
+
+  for (const name in props) {
+    const value = props[name as keyof LauncherState];
+
+    if (name in launch) {
+      if (value === undefined) {
+        delete launch[name as keyof LaunchParams];
+        sessionStorage.removeItem(`${launcherSessionStoragePrefix}.${name}`);
+      } else {
+        (launch[name as keyof LaunchParams] as any) = value;
+        sessionStorage.setItem(
+            `${launcherSessionStoragePrefix}.${name}`,
+            JSON.stringify(value)
+        );
+      }
+    } else {
+      if (value === undefined) {
+        sessionStorage.removeItem(`${name}`);
+      } else {
+        sessionStorage.setItem(name, JSON.stringify(value));
+      }
+    }
+  }
+  //
+  // searchParams.set("launch", encode(launch));
+  // setSearchParams(searchParams);
+}
+
 /**
  * Uses the query string to store the state of the launcher page
  */
 export default function useLauncherQuery(
   initialState: Partial<LauncherQuery> = {}
 ) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { authRequired } = useConfig();
 
   const query: LauncherQuery = {
@@ -49,47 +96,26 @@ export default function useLauncherQuery(
     query[key as keyof LauncherQuery] = value;
   });
 
+// On initialization, reconstruct the `launcherState` object from sessionStorage
+
 
   if(authRequired){
     // authentication is required, so there's no guarantee that the launch parameter is encoded as a JSON payload
     // instead we need to exit early and redirect to the AuthCallback
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return { query, launch: {} as LaunchParams, setQuery: (props: Partial<LauncherState>) => {
-      console.warn("called setQuery when auth is required, doing nothing", props);
-      } };
-  }
+    const launch: LaunchParams = getLauncherStateFromSessionStorage()
 
-
-  const launch: LaunchParams = decode(query.launch) as LaunchParams;
-  // Properties that belong to the launch parameters are encoded into a
-  // `launch` parameter. Everything else is store as normal query parameter.
-  // `undefined` can be used to remove launch or query parameters.
-  function setQuery(props: Partial<LauncherState>) {
-    for (const name in props) {
-      const value = props[name as keyof LauncherState];
-
-      if (name in launch) {
-        if (value === undefined) {
-          delete launch[name as keyof LaunchParams];
-        } else {
-          (launch[name as keyof LaunchParams] as any) = value;
-        }
-      }
-
-      // everything else is store as normal query parameter
-      else {
-        if (value === undefined) {
-          searchParams.delete(name);
-        } else {
-          searchParams.set(name, value + "");
-        }
-      }
+    return { query, launch, setQuery};
+  } else {
+    // authentication is not required, so we can safely decode the launch parameter
+    // and set the query parameters from the sessionStorage
+    //parse the querystring launch data, if it exists
+    if(query.launch){
+      setQuery(decode(query.launch));
     }
-
-    searchParams.set("launch", encode(launch));
-    setSearchParams(searchParams);
+    const launch: LaunchParams = getLauncherStateFromSessionStorage()
+    return { query, launch, setQuery };
   }
 
-  return { query, launch, setQuery };
+
 }
