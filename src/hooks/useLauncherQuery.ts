@@ -37,14 +37,14 @@ const launcherSessionStoragePrefix = "launcher-state";
 // populate LaunchParams from sessionStorage.
 // It iterates through all keys in sessionStorage, filters those that match the launcherSessionStoragePrefix, and
 // reconstructs a LaunchParams object.
-function getLauncherStateFromSessionStorage(): LaunchParams {
+function getLauncherStateFromSessionStorage<T extends Record<string, any>>(): T {
   return Object.keys(sessionStorage)
       .filter((key) => key.startsWith(`${launcherSessionStoragePrefix}.`))
       .reduce((acc, key) => {
-        const launchKey = key.replace(`${launcherSessionStoragePrefix}.`, "") as (keyof LaunchParams);
-        acc[launchKey] = JSON.parse(sessionStorage.getItem(key) || "null");
+        const launchKey = key.replace(`${launcherSessionStoragePrefix}.`, "") as keyof T;
+        acc[launchKey] = JSON.parse(sessionStorage.getItem(key) || "null") as T[keyof T];
         return acc;
-      }, {} as LaunchParams);
+      }, {} as T);
 }
 
 //saveLauncherStateToSessionStorage
