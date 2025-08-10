@@ -33,7 +33,12 @@ const LauncherQueryDefaults: LauncherQuery = {
 
 export function getLaunchParamsFromSearchParams(searchParams: URLSearchParams): LaunchParams {
   const launch = searchParams.get("launch");
-  return launch ? (decode(launch) as LaunchParams) : {} as LaunchParams;
+  try {
+    return launch ? (decode(launch) as LaunchParams) : {} as LaunchParams;
+  } catch (error) {
+    console.warn("Failed to decode launch parameters from search params", error);
+    return {} as LaunchParams;
+  }
 }
 
 export function setLaunchParamsToSearchParams(
