@@ -150,7 +150,13 @@ export function encode(params: LaunchParams, ignoreErrors = false): string {
  * Used on the back-end to decode launch parameters
  */
 export function decode(launch: string): LaunchParams {
-  const arr = JSON.parse(base64UrlDecode(launch));
+  let arr = undefined
+  try {
+    arr = JSON.parse(base64UrlDecode(launch));
+  } catch (error) {
+    console.error(`Failed to decode launch parameters:`, error);
+    throw new Error(`Failed to decode launch parameters: ${error}`);
+  }
 
   if (arr && typeof arr === "object" && !Array.isArray(arr)) {
     return decodeLegacy(arr);
