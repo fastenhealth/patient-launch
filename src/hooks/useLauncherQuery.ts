@@ -70,9 +70,9 @@ function setQuery(props: Partial<LauncherState>) {
       }
     } else {
       if (value === undefined) {
-        sessionStorage.removeItem(`${name}`);
+        sessionStorage.removeItem(`${launcherSessionStoragePrefix}.${name}`);
       } else {
-        sessionStorage.setItem(name, JSON.stringify(value));
+        sessionStorage.setItem(`${launcherSessionStoragePrefix}.${name}`, JSON.stringify(value));
       }
     }
   }
