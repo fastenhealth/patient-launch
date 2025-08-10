@@ -111,7 +111,9 @@ function App() {
       path: "*",
       element: <Navigate to="/" replace />,
     },
-  ]);
+  ],{
+    basename: "/patient-launch/", // All routes will be prefixed with /my-app
+  });
 
   return (
     <TooltipProvider delayDuration={100}>
