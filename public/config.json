@@ -3,7 +3,8 @@
   "authRequired": true,
   "launchParamConfigType": "default",
   "oAuthGrantType": "authorization_code",
-  "oAuthScope": "fhirUser offline_access openid profile launch/practitioner user/*.rs",
+  "COMMENT.DISABLED.oAuthScope": "fhirUser offline_access openid profile launch/practitioner user/*.rs",
+  "oAuthScope": "fhirUser offline_access openid profile launch/patient patient/*.read",
   "oAuthClientId": "5f318fe2-34cc-4bd2-8949-6e6e1918ab4d",
 
   "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
