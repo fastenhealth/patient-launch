@@ -83,7 +83,7 @@ export function setQuery(
  * Uses the query string to store the state of the launcher page
  */
 export default function useLauncherQuery(
-  initialState: Partial<LauncherQuery> = {}
+    initialState: Partial<LauncherQuery> = {}
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { authRequired } = useConfig();
@@ -97,23 +97,12 @@ export default function useLauncherQuery(
     query[key as keyof LauncherQuery] = value;
   });
 
-  // Properties that belong to the launch parameters are encoded into a
-  // `launch` parameter. Everything else is store as normal query parameter.
-  // `undefined` can be used to remove launch or query parameters.
+  // Dynamically derive the launch variable from searchParams
+  const launch = getLaunchParamsFromSearchParams(searchParams);
+
   function setQueryWrapped(props: Partial<LauncherState>) {
     return setQuery(searchParams, setSearchParams, props);
   }
 
-  if(authRequired){
-
-    // authentication is required, so there's no guarantee that the launch parameter is encoded as a JSON payload
-    // instead we need to exit early and redirect to the AuthCallback
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return { query, launch: {
-      launch_type: "provider-ehr"
-      } as LaunchParams, setQuery: setQueryWrapped };
-  } else {
-    const launch: LaunchParams = decode(query.launch) as LaunchParams;
-    return { query, launch, setQuery: setQueryWrapped };
-  }
+  return { query, launch, setQuery: setQueryWrapped };
 }
