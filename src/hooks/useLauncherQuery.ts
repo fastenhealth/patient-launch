@@ -1,7 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import type { LaunchParams } from "../lib/codec.ts";
 import { decode, encode } from "../lib/codec.ts";
-import useConfig from "@/hooks/useConfig.ts";
 
 interface LauncherState
   extends Omit<Partial<LauncherQuery>, "launch">,
@@ -86,7 +85,6 @@ export default function useLauncherQuery(
     initialState: Partial<LauncherQuery> = {}
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { authRequired } = useConfig();
 
   const query: LauncherQuery = {
     ...LauncherQueryDefaults,
